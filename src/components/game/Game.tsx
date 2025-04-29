@@ -60,7 +60,7 @@ const Game: React.FC = () => {
               <div className="p-4 rounded-lg text-center">
                 <h2 className="text-white text-2xl mb-2">
                   {gameState.level === 1 
-                    ? "Welcome to Arkanoid!" 
+                    ? "Welcome to Last Pick Standing!" 
                     : `Level ${gameState.level}`}
                 </h2>
                 <p className="text-gray-300">
