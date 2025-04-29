@@ -26,7 +26,7 @@ const Paddle: React.FC<PaddleProps> = ({ paddle }) => {
         className="h-full object-contain"
         style={{ 
           width: "100%", // Same width
-          height: "400%", // Four times the height (doubled again)
+          height: "100%", // Match container height
           filter: "drop-shadow(0 0 8px rgba(75,235,226,0.6))",
           transformOrigin: "center bottom"
         }}
