@@ -155,7 +155,7 @@ export const NFL_TEAMS: NFLTeam[] = [
   {
     id: "phi",
     name: "Philadelphia Eagles",
-    logoUrl: "https://static.www.nfl.com/image/private/f_auto/league/puhrqgj71gobgxwvb308",
+    logoUrl: "https://static.www.nfl.com/t_person_squared_mobile/f_auto/league/api/clubs/logos/PHI",
     color: "#004C54",
   },
   {
