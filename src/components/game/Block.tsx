@@ -14,7 +14,6 @@ const Block: React.FC<BlockProps> = ({ block }) => {
 
   // Special handling for Chicago Bears logo
   const isChicagoBears = block.team?.id === "chi";
-  const bearsLogoUrl = "https://static.www.nfl.com/image/private/f_auto/league/qhyshk2hk0qzwpnf9ksr";
 
   return (
     <div
@@ -33,20 +32,30 @@ const Block: React.FC<BlockProps> = ({ block }) => {
     >
       {block.team && (
         <div className="w-full h-full flex items-center justify-center p-1 overflow-hidden">
-          <img 
-            src={isChicagoBears ? bearsLogoUrl : block.team.logoUrl} 
-            alt={block.team.name}
-            className="max-w-full max-h-full object-contain"
-            loading="eager"
-            style={isChicagoBears ? { filter: 'invert(1) brightness(2)' } : {}}
-            onError={(e) => {
-              // Fallback if image fails to load
-              const target = e.target as HTMLImageElement;
-              target.onerror = null;
-              target.style.display = 'none';
-              target.parentElement!.innerHTML = block.team?.name.substring(0, 3) || '';
-            }}
-          />
+          {isChicagoBears ? (
+            <div className="w-full h-full flex items-center justify-center bg-white rounded-full p-0.5">
+              <img 
+                src="https://static.www.nfl.com/image/private/f_auto/league/qhyshk2hk0qzwpnf9ksr" 
+                alt="Chicago Bears"
+                className="max-w-full max-h-full object-contain"
+                loading="eager"
+              />
+            </div>
+          ) : (
+            <img 
+              src={block.team.logoUrl} 
+              alt={block.team.name}
+              className="max-w-full max-h-full object-contain"
+              loading="eager"
+              onError={(e) => {
+                // Fallback if image fails to load
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                target.style.display = 'none';
+                target.parentElement!.innerHTML = block.team?.name.substring(0, 3) || '';
+              }}
+            />
+          )}
         </div>
       )}
     </div>
