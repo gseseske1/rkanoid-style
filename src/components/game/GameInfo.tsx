@@ -29,7 +29,8 @@ const GameInfo: React.FC<GameInfoProps> = ({ gameState, onStart, onReset }) => {
         {gameState.gameOver && (
           <button 
             onClick={onReset} 
-            className="px-4 py-2 bg-neon-pink rounded-lg shadow-[0_0_10px_rgba(255,0,255,0.5)] hover:shadow-[0_0_15px_rgba(255,0,255,0.8)] transition-shadow"
+            className="px-4 py-2 rounded-lg shadow-[0_0_10px_rgba(75,235,226,0.5)] hover:shadow-[0_0_15px_rgba(75,235,226,0.8)] transition-shadow"
+            style={{ backgroundColor: "#4bebe2" }}
           >
             New Game
           </button>
