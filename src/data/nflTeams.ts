@@ -107,7 +107,7 @@ export const NFL_TEAMS: NFLTeam[] = [
   {
     id: "lac",
     name: "Los Angeles Chargers",
-    logoUrl: "https://static.www.nfl.com/image/private/f_auto/league/ayvwcmluj2ohkdlbiegi",
+    logoUrl: "https://static.www.nfl.com/t_person_squared_mobile/f_auto/league/api/clubs/logos/LAC",
     color: "#0080C6",
   },
   {
