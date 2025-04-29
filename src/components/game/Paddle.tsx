@@ -14,8 +14,7 @@ const Paddle: React.FC<PaddleProps> = ({ paddle }) => {
         width: `${paddle.size.width}px`, // Use the actual paddle width from game logic
         height: `50px`, // Fixed height of 50px
         left: `${paddle.position.x}px`,
-        top: `${paddle.position.y}px`,
-        marginBottom: "10px",
+        top: `${paddle.position.y - 10}px`, // Moved up by 10px to create space below
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
