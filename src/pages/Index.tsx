@@ -7,9 +7,9 @@ const Index = () => {
     <div className="min-h-screen flex flex-col bg-background p-4">
       <header className="mb-6 text-center">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-neon-blue via-neon-purple to-neon-pink inline-block text-transparent bg-clip-text">
-          Arkanoid Classic
+          Last Pick Standing
         </h1>
-        <p className="text-muted-foreground mt-2">Break all the blocks and advance through levels!</p>
+        <p className="text-muted-foreground mt-2">Last team standing is your Survivor Pick for the Week</p>
       </header>
       
       <main className="flex-grow">
