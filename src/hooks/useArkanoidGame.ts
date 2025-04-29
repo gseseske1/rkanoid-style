@@ -10,10 +10,10 @@ import {
 import { NFL_TEAMS } from "@/data/nflTeams";
 
 // Game configuration
-const PADDLE_WIDTH = 100;
+const PADDLE_WIDTH = 200; // Doubled from 100 to 200
 const PADDLE_HEIGHT = 15;
 const BALL_RADIUS = 10;
-const INITIAL_BALL_SPEED = 5;
+const INITIAL_BALL_SPEED = 3; // Reduced from 5 to 3
 const BLOCK_WIDTH = 60;
 const BLOCK_HEIGHT = 50;  // Increased height for better logo visibility
 const BLOCK_ROWS = 4;     // 4 rows x 8 columns = 32 blocks
