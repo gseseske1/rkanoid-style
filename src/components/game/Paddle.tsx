@@ -11,7 +11,7 @@ const Paddle: React.FC<PaddleProps> = ({ paddle }) => {
     <div
       className="absolute rounded-lg overflow-hidden"
       style={{
-        width: `${paddle.size.width}px`,
+        width: `${paddle.size.width / 2}px`, // Half the paddle width
         height: `50px`, // Fixed height of 50px
         left: `${paddle.position.x}px`,
         top: `${paddle.position.y}px`,
