@@ -35,7 +35,7 @@ export const NFL_TEAMS: NFLTeam[] = [
   {
     id: "chi",
     name: "Chicago Bears",
-    logoUrl: "https://content.sportslogos.net/logos/7/169/full/364.png",
+    logoUrl: "https://static.www.nfl.com/t_q-best/league/api/clubs/logos/CHI",
     color: "#0B162A",
   },
   {
