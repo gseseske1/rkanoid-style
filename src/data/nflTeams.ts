@@ -191,7 +191,7 @@ export const NFL_TEAMS: NFLTeam[] = [
   {
     id: "was",
     name: "Washington Commanders",
-    logoUrl: "https://static.www.nfl.com/image/private/f_auto/league/ocaznpjqxz78istqn1ho",
+    logoUrl: "https://static.www.nfl.com/t_person_squared_mobile/f_auto/league/api/clubs/logos/WAS",
     color: "#5A1414",
   },
 ];
