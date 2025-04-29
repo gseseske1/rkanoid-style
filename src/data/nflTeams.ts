@@ -113,7 +113,7 @@ export const NFL_TEAMS: NFLTeam[] = [
   {
     id: "lar",
     name: "Los Angeles Rams",
-    logoUrl: "https://static.www.nfl.com/image/private/f_auto/league/lts5lf27iseybpnhpkp2",
+    logoUrl: "https://static.www.nfl.com/t_person_squared_mobile/f_auto/league/api/clubs/logos/LA",
     color: "#003594",
   },
   {
