@@ -23,8 +23,13 @@ const Paddle: React.FC<PaddleProps> = ({ paddle }) => {
       <img 
         src="/lovable-uploads/e7867c96-018b-492f-9170-3bfa9e01ab0b.png"
         alt="Whale paddle"
-        className="w-full h-full object-cover"
-        style={{ filter: "drop-shadow(0 0 8px rgba(75,235,226,0.6))" }}
+        className="h-full object-contain"
+        style={{ 
+          width: "50%", // Half the width
+          height: "200%", // Twice the height
+          filter: "drop-shadow(0 0 8px rgba(75,235,226,0.6))",
+          transformOrigin: "center bottom"
+        }}
       />
     </div>
   );
