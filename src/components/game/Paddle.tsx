@@ -25,7 +25,7 @@ const Paddle: React.FC<PaddleProps> = ({ paddle }) => {
         alt="Whale paddle"
         className="h-full object-contain"
         style={{ 
-          width: "50%", // Half the width
+          width: "100%", // Same width
           height: "200%", // Twice the height
           filter: "drop-shadow(0 0 8px rgba(75,235,226,0.6))",
           transformOrigin: "center bottom"
