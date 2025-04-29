@@ -9,7 +9,7 @@ const Index = () => {
         <h1 className="text-4xl font-bold bg-gradient-to-r from-neon-blue via-neon-purple to-neon-pink inline-block text-transparent bg-clip-text">
           Last Pick Standing
         </h1>
-        <p className="text-muted-foreground mt-2">Last team standing is your Survivor Pick for the Week</p>
+        <p className="text-muted-foreground mt-2">Break the blocks and the last team standing is your survivor pick for the week</p>
       </header>
       
       <main className="flex-grow">
