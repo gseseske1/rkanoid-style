@@ -149,7 +149,7 @@ export const NFL_TEAMS: NFLTeam[] = [
   {
     id: "nyj",
     name: "New York Jets",
-    logoUrl: "https://static.www.nfl.com/image/private/f_auto/league/wlzozc2ty4ezdmnkwrlo",
+    logoUrl: "https://static.www.nfl.com/t_person_squared_mobile/f_auto/league/api/clubs/logos/NYJ",
     color: "#125740",
   },
   {
