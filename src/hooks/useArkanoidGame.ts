@@ -7,29 +7,23 @@ import {
   Paddle, 
   Position
 } from "@/models/GameTypes";
-import { NFL_TEAMS } from "@/data/nflTeams";
-
-// Game configuration
-const PADDLE_WIDTH = 100;
-const PADDLE_HEIGHT = 15;
-const BALL_RADIUS = 10;
-const INITIAL_BALL_SPEED = 5;
-const BLOCK_WIDTH = 60;
-const BLOCK_HEIGHT = 50;  // Increased height for better logo visibility
-const BLOCK_ROWS = 4;     // 4 rows x 8 columns = 32 blocks
-const BLOCK_COLUMNS = 8;
-const BLOCK_GAP = 10;
-const INITIAL_LIVES = 3;
-
-// Colors for the blocks by row
-const BLOCK_COLORS = [
-  "bg-gameBlock-red",
-  "bg-gameBlock-orange",
-  "bg-gameBlock-yellow",
-  "bg-gameBlock-green",
-  "bg-gameBlock-blue",
-  "bg-gameBlock-purple",
-];
+import { 
+  PADDLE_WIDTH, 
+  PADDLE_HEIGHT, 
+  BALL_RADIUS, 
+  INITIAL_LIVES 
+} from "@/game/constants";
+import { createBlocks } from "@/game/utils/blockUtils";
+import { 
+  checkWallCollision, 
+  checkPaddleCollision, 
+  checkBlockCollision 
+} from "@/game/utils/collisionUtils";
+import { 
+  setupNewLevel, 
+  handleBallOutOfBounds, 
+  launchBall 
+} from "@/game/utils/gameStateUtils";
 
 export const useArkanoidGame = (
   gameContainerRef: React.RefObject<HTMLDivElement>
@@ -72,71 +66,26 @@ export const useArkanoidGame = (
       height: rect.height,
     };
 
-    const paddleY = containerSizeRef.current.height - 50;
-    const paddleX = (containerSizeRef.current.width - PADDLE_WIDTH) / 2;
+    const { paddlePos, ballPos } = setupNewLevel(
+      PADDLE_WIDTH,
+      containerSizeRef.current.width,
+      containerSizeRef.current.height
+    );
 
     setPaddle({
-      position: { x: paddleX, y: paddleY },
+      position: paddlePos,
       size: { width: PADDLE_WIDTH, height: PADDLE_HEIGHT },
       speed: 15,
     });
 
     setBall({
-      position: { 
-        x: paddleX + PADDLE_WIDTH / 2, 
-        y: paddleY - BALL_RADIUS - 2 
-      },
+      position: ballPos,
       velocity: { dx: 0, dy: 0 },
       radius: BALL_RADIUS,
       size: { width: BALL_RADIUS * 2, height: BALL_RADIUS * 2 },
     });
 
-    createBlocks();
-  }, [gameContainerRef]);
-
-  // Create blocks for the level
-  const createBlocks = useCallback(() => {
-    if (!gameContainerRef.current) return;
-
-    const container = gameContainerRef.current.getBoundingClientRect();
-    const availableWidth = container.width - (BLOCK_GAP * 2);
-    const blockWithGap = BLOCK_WIDTH + BLOCK_GAP;
-    
-    // Fixed layout for exactly 32 blocks (8 columns x 4 rows)
-    const blocksPerRow = BLOCK_COLUMNS;
-    const marginX = (container.width - blocksPerRow * blockWithGap + BLOCK_GAP) / 2;
-    
-    const newBlocks: Block[] = [];
-    let teamIndex = 0;
-    
-    // Create blocks in rows and columns - exactly 32 blocks (8x4)
-    for (let row = 0; row < BLOCK_ROWS; row++) {
-      for (let col = 0; col < blocksPerRow; col++) {
-        const team = NFL_TEAMS[teamIndex];
-        
-        const block: Block = {
-          position: {
-            x: marginX + col * blockWithGap,
-            y: 80 + row * (BLOCK_HEIGHT + BLOCK_GAP),
-          },
-          size: { width: BLOCK_WIDTH, height: BLOCK_HEIGHT },
-          color: team.color,
-          value: (BLOCK_ROWS - row) * 10, // Higher rows are worth more
-          destroyed: false,
-          team: team,
-        };
-        
-        newBlocks.push(block);
-        teamIndex++;
-        
-        // Should have exactly 32 blocks for 32 NFL teams
-        if (teamIndex >= NFL_TEAMS.length) break;
-      }
-      
-      // Break if we've added all 32 team blocks
-      if (teamIndex >= NFL_TEAMS.length) break;
-    }
-    
+    const newBlocks = createBlocks(containerSizeRef.current.width);
     setBlocks(newBlocks);
   }, [gameContainerRef]);
 
@@ -157,10 +106,7 @@ export const useArkanoidGame = (
       // Launch the ball
       setBall((prevBall) => ({
         ...prevBall,
-        velocity: {
-          dx: Math.random() > 0.5 ? INITIAL_BALL_SPEED : -INITIAL_BALL_SPEED,
-          dy: -INITIAL_BALL_SPEED,
-        },
+        velocity: launchBall(),
       }));
     }
   }, [gameState.gameOver, initGame]);
@@ -185,28 +131,27 @@ export const useArkanoidGame = (
       level: prev.level + 1,
     }));
     
-    // Reset ball and paddle
-    const paddleY = containerSizeRef.current.height - 50;
-    const paddleX = (containerSizeRef.current.width - PADDLE_WIDTH) / 2;
+    const { paddlePos, ballPos } = setupNewLevel(
+      PADDLE_WIDTH,
+      containerSizeRef.current.width,
+      containerSizeRef.current.height
+    );
     
     setPaddle((prev) => ({
       ...prev,
-      position: { x: paddleX, y: paddleY },
+      position: paddlePos,
     }));
     
     setBall({
-      position: { 
-        x: paddleX + PADDLE_WIDTH / 2, 
-        y: paddleY - BALL_RADIUS - 2 
-      },
+      position: ballPos,
       velocity: { dx: 0, dy: 0 },
       radius: BALL_RADIUS,
       size: { width: BALL_RADIUS * 2, height: BALL_RADIUS * 2 },
     });
     
-    // Create new blocks
-    createBlocks();
-  }, [createBlocks]);
+    const newBlocks = createBlocks(containerSizeRef.current.width);
+    setBlocks(newBlocks);
+  }, []);
 
   // Handle ball movement and collisions
   const updateGame = useCallback((time: number) => {
@@ -240,99 +185,54 @@ export const useArkanoidGame = (
       }));
     }
     
-    // Move the ball
+    // Calculate new ball position
     const newBallPosition: Position = {
       x: ball.position.x + ball.velocity.dx,
       y: ball.position.y + ball.velocity.dy,
     };
     
-    // Wall collisions
-    if (
-      newBallPosition.x - ball.radius <= 0 ||
-      newBallPosition.x + ball.radius >= containerSizeRef.current.width
-    ) {
-      // Bounce off the left/right walls
-      setBall((prev) => ({
-        ...prev,
-        velocity: { ...prev.velocity, dx: -prev.velocity.dx },
-        position: {
-          x: prev.velocity.dx > 0 
-            ? containerSizeRef.current.width - prev.radius 
-            : prev.radius,
-          y: newBallPosition.y,
-        },
-      }));
-      return;
-    }
+    // Check wall collisions
+    const wallCollision = checkWallCollision(
+      ball, 
+      containerSizeRef.current.width, 
+      containerSizeRef.current.height
+    );
     
-    if (newBallPosition.y - ball.radius <= 0) {
-      // Bounce off the ceiling
-      setBall((prev) => ({
-        ...prev,
-        velocity: { ...prev.velocity, dy: -prev.velocity.dy },
-        position: { x: newBallPosition.x, y: prev.radius },
-      }));
-      return;
-    }
-    
-    if (newBallPosition.y + ball.radius >= containerSizeRef.current.height) {
-      // Ball went below the screen
-      if (gameState.lives > 1) {
-        // Lose a life and reset ball position
-        setGameState((prev) => ({
+    if (wallCollision.collision) {
+      if (wallCollision.newVelocity) {
+        // Normal wall collision (left, right, top)
+        setBall((prev) => ({
           ...prev,
-          lives: prev.lives - 1,
-          playing: false,
+          velocity: wallCollision.newVelocity!,
+          position: wallCollision.newPosition!,
         }));
+      } else {
+        // Ball went out of bounds (bottom)
+        const { updatedGameState, newBallPosition, newBallVelocity } = handleBallOutOfBounds(
+          gameState,
+          paddle,
+          containerSizeRef.current.height
+        );
         
-        // Reset ball on paddle
-        const paddleY = containerSizeRef.current.height - 50;
-        const paddleCenter = paddle.position.x + paddle.size.width / 2;
+        setGameState(updatedGameState);
         
         setBall({
-          position: { 
-            x: paddleCenter, 
-            y: paddleY - BALL_RADIUS - 2 
-          },
-          velocity: { dx: 0, dy: 0 },
-          radius: BALL_RADIUS,
-          size: { width: BALL_RADIUS * 2, height: BALL_RADIUS * 2 },
+          ...ball,
+          position: newBallPosition,
+          velocity: newBallVelocity,
         });
-      } else {
-        // Game over
-        setGameState((prev) => ({
-          ...prev,
-          gameOver: true,
-          playing: false,
-        }));
       }
       return;
     }
     
-    // Paddle collision
-    if (
-      newBallPosition.y + ball.radius >= paddle.position.y &&
-      newBallPosition.y - ball.radius <= paddle.position.y + paddle.size.height &&
-      newBallPosition.x + ball.radius >= paddle.position.x &&
-      newBallPosition.x - ball.radius <= paddle.position.x + paddle.size.width
-    ) {
-      // Calculate where on the paddle the ball hit (normalized from -1 to 1)
-      const hitPoint = (newBallPosition.x - (paddle.position.x + paddle.size.width / 2)) / (paddle.size.width / 2);
-      
-      // Angle the ball based on where it hit the paddle
-      const angle = hitPoint * (Math.PI / 4); // Max 45 degree angle
-      const speed = Math.sqrt(ball.velocity.dx ** 2 + ball.velocity.dy ** 2);
-      
+    // Check paddle collision
+    const paddleCollision = checkPaddleCollision(ball, paddle, newBallPosition);
+    
+    if (paddleCollision.collision) {
       setBall((prev) => ({
         ...prev,
-        velocity: {
-          dx: Math.sin(angle) * speed,
-          dy: -Math.abs(Math.cos(angle) * speed), // Always go up
-        },
-        position: {
-          x: newBallPosition.x,
-          y: paddle.position.y - ball.radius, // Place just above paddle
-        },
+        velocity: paddleCollision.newVelocity!,
+        position: paddleCollision.newPosition!,
       }));
       return;
     }
@@ -347,36 +247,14 @@ export const useArkanoidGame = (
       allBlocksDestroyed = false;
       
       // Check for collision with this block
-      if (
-        newBallPosition.x + ball.radius >= block.position.x &&
-        newBallPosition.x - ball.radius <= block.position.x + block.size.width &&
-        newBallPosition.y + ball.radius >= block.position.y &&
-        newBallPosition.y - ball.radius <= block.position.y + block.size.height
-      ) {
+      const blockCollision = checkBlockCollision(ball, block, newBallPosition);
+      
+      if (blockCollision.collision) {
         hasCollision = true;
-        
-        // Find collision side and bounce accordingly
-        const ballCenterX = newBallPosition.x;
-        const ballCenterY = newBallPosition.y;
-        const blockCenterX = block.position.x + block.size.width / 2;
-        const blockCenterY = block.position.y + block.size.height / 2;
-        
-        const deltaX = ballCenterX - blockCenterX;
-        const deltaY = ballCenterY - blockCenterY;
-        
-        const absX = Math.abs(deltaX);
-        const absY = Math.abs(deltaY);
-
-        // Simplification: if the ball is more to the sides, bounce horizontally
-        // otherwise bounce vertically
-        const horizontalCollision = absX * block.size.height > absY * block.size.width;
         
         setBall((prev) => ({
           ...prev,
-          velocity: {
-            dx: horizontalCollision ? -prev.velocity.dx : prev.velocity.dx,
-            dy: horizontalCollision ? prev.velocity.dy : -prev.velocity.dy,
-          },
+          velocity: blockCollision.newVelocity!,
         }));
         
         // Update score
@@ -410,7 +288,7 @@ export const useArkanoidGame = (
       }));
     }
     
-  }, [ball, blocks, gameState.lives, gameState.playing, nextLevel, paddle]);
+  }, [ball, blocks, gameState, nextLevel, paddle]);
 
   // Game loop using requestAnimationFrame
   useEffect(() => {
