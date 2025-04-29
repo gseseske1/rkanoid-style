@@ -26,7 +26,18 @@ const Block: React.FC<BlockProps> = ({ block }) => {
         backgroundColor: block.color,
         boxShadow: `0 0 8px 1px ${block.color}80`,
       }}
-    />
+    >
+      {block.team && (
+        <div className="w-full h-full flex items-center justify-center p-1 overflow-hidden">
+          <img 
+            src={block.team.logoUrl} 
+            alt={block.team.name}
+            className="max-w-full max-h-full object-contain"
+            loading="eager"
+          />
+        </div>
+      )}
+    </div>
   );
 };
 

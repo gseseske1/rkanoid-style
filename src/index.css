@@ -61,3 +61,17 @@
 .block-destroy {
   animation: blockDestroy 0.3s ease-out forwards;
 }
+
+/* NFL team logo blocks */
+.nfl-team-block {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nfl-team-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}

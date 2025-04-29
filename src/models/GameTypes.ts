@@ -30,10 +30,18 @@ export interface Paddle extends GameObject {
   speed: number;
 }
 
+export interface NFLTeam {
+  id: string;
+  name: string;
+  logoUrl: string;
+  color: string;
+}
+
 export interface Block extends GameObject {
   color: string;
   value: number;
   destroyed: boolean;
+  team?: NFLTeam;
 }
 
 export interface GameState {
