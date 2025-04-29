@@ -15,6 +15,7 @@ const Paddle: React.FC<PaddleProps> = ({ paddle }) => {
         height: `50px`, // Fixed height of 50px
         left: `${paddle.position.x}px`,
         top: `${paddle.position.y}px`,
+        marginBottom: "10px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
