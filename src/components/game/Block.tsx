@@ -38,6 +38,7 @@ const Block: React.FC<BlockProps> = ({ block }) => {
               // Fallback if image fails to load
               const target = e.target as HTMLImageElement;
               target.onerror = null;
+              console.log(`Failed to load image for ${block.team?.name}`);
               target.style.display = 'none';
               target.parentElement!.innerHTML = block.team?.name.substring(0, 3) || '';
             }}
