@@ -12,8 +12,9 @@ interface GameInfoProps {
 const GameInfo: React.FC<GameInfoProps> = ({ gameState, onStart, onReset }) => {
   return (
     <div className="absolute top-0 left-0 right-0 flex justify-between p-4 text-white z-10">
-      <div>
+      <div className="flex gap-6">
         <div className="text-lg font-bold">Score: {gameState.score}</div>
+        <div className="text-lg font-bold">Lives: {gameState.lives}</div>
       </div>
       <div className="flex gap-2">
         {!gameState.playing && !gameState.gameOver && (
