@@ -34,6 +34,13 @@ const Block: React.FC<BlockProps> = ({ block }) => {
             alt={block.team.name}
             className="max-w-full max-h-full object-contain"
             loading="eager"
+            onError={(e) => {
+              // Fallback if image fails to load
+              const target = e.target as HTMLImageElement;
+              target.onerror = null;
+              target.style.display = 'none';
+              target.parentElement!.innerHTML = block.team?.name.substring(0, 3) || '';
+            }}
           />
         </div>
       )}

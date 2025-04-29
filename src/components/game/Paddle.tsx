@@ -18,7 +18,7 @@ const Paddle: React.FC<PaddleProps> = ({ paddle }) => {
       }}
     >
       <img 
-        src="/placeholder.svg" 
+        src="/lovable-uploads/176cb1dc-daa1-4ac3-a4e0-096a365e1f09.png" 
         alt="Whale paddle"
         className="w-full h-full object-cover"
         style={{

@@ -47,13 +47,13 @@ export const NFL_TEAMS: NFLTeam[] = [
   {
     id: "cle",
     name: "Cleveland Browns",
-    logoUrl: "https://static.www.nfl.com/image/private/f_auto/league/ieid8hoygzdlmzo0tnf6",
+    logoUrl: "https://static.www.nfl.com/image/private/f_auto/league/dxibuyxbk0b9ua5ih9hn",
     color: "#311D00",
   },
   {
     id: "dal",
     name: "Dallas Cowboys",
-    logoUrl: "https://static.www.nfl.com/image/private/f_auto/league/ieid8hoygzdlmzo0tnf6",
+    logoUrl: "https://static.www.nfl.com/image/private/f_auto/league/m8obleevs5l2v8lqkfvl",
     color: "#003594",
   },
   {
@@ -113,7 +113,7 @@ export const NFL_TEAMS: NFLTeam[] = [
   {
     id: "lar",
     name: "Los Angeles Rams",
-    logoUrl: "https://static.www.nfl.com/image/private/f_auto/league/ayvwcmluj2ohkdlbiegi",
+    logoUrl: "https://static.www.nfl.com/image/private/f_auto/league/lts5lf27iseybpnhpkp2",
     color: "#003594",
   },
   {
