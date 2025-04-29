@@ -17,7 +17,7 @@ export const NFL_TEAMS: NFLTeam[] = [
   {
     id: "bal",
     name: "Baltimore Ravens",
-    logoUrl: "https://static.www.nfl.com/image/private/f_auto/league/ulwgqwwbjdlmwgubsak2",
+    logoUrl: "https://static.www.nfl.com/t_person_squared_mobile/f_auto/league/api/clubs/logos/BAL",
     color: "#241773",
   },
   {
