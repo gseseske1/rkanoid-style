@@ -39,8 +39,20 @@ const Game: React.FC = () => {
             <div className="absolute inset-0 flex items-center justify-center z-20">
               <div className="bg-black/80 p-8 rounded-lg text-center">
                 <h2 className="text-neon-pink text-4xl font-bold mb-4 shadow-text-lg">
-                  Game Over
+                  {gameState.yourTeam ? "Your Team This Week" : "Game Over"}
                 </h2>
+                {gameState.yourTeam && (
+                  <div className="flex flex-col items-center mb-4">
+                    <img 
+                      src={gameState.yourTeam.logoUrl} 
+                      alt={gameState.yourTeam.name}
+                      className="w-32 h-32 object-contain mb-4"
+                    />
+                    <h3 className="text-white text-2xl font-bold" style={{ color: gameState.yourTeam.color }}>
+                      {gameState.yourTeam.name}
+                    </h3>
+                  </div>
+                )}
                 <p className="text-white text-xl mb-6">
                   Final Score: {gameState.score}
                 </p>

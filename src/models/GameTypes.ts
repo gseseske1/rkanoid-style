@@ -50,4 +50,5 @@ export interface GameState {
   score: number;
   lives: number;
   level: number;
+  yourTeam: NFLTeam | null;
 }

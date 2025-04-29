@@ -10,26 +10,16 @@ import {
 import { NFL_TEAMS } from "@/data/nflTeams";
 
 // Game configuration
-const PADDLE_WIDTH = 200; // Doubled from 100 to 200
+const PADDLE_WIDTH = 200;
 const PADDLE_HEIGHT = 15;
 const BALL_RADIUS = 10;
-const INITIAL_BALL_SPEED = 3; // Reduced from 5 to 3
+const INITIAL_BALL_SPEED = 3;
 const BLOCK_WIDTH = 60;
-const BLOCK_HEIGHT = 50;  // Increased height for better logo visibility
-const BLOCK_ROWS = 4;     // 4 rows x 8 columns = 32 blocks
+const BLOCK_HEIGHT = 50;
+const BLOCK_ROWS = 4;
 const BLOCK_COLUMNS = 8;
 const BLOCK_GAP = 10;
 const INITIAL_LIVES = 3;
-
-// Colors for the blocks by row
-const BLOCK_COLORS = [
-  "bg-gameBlock-red",
-  "bg-gameBlock-orange",
-  "bg-gameBlock-yellow",
-  "bg-gameBlock-green",
-  "bg-gameBlock-blue",
-  "bg-gameBlock-purple",
-];
 
 export const useArkanoidGame = (
   gameContainerRef: React.RefObject<HTMLDivElement>
@@ -40,6 +30,7 @@ export const useArkanoidGame = (
     score: 0,
     lives: INITIAL_LIVES,
     level: 1,
+    yourTeam: null,
   });
 
   const [ball, setBall] = useState<Ball>({
@@ -150,6 +141,7 @@ export const useArkanoidGame = (
         score: 0,
         lives: INITIAL_LIVES,
         level: 1,
+        yourTeam: null,
       });
       initGame();
     } else {
@@ -173,6 +165,7 @@ export const useArkanoidGame = (
       score: 0,
       lives: INITIAL_LIVES,
       level: 1,
+      yourTeam: null,
     });
     initGame();
   }, [initGame]);
@@ -339,12 +332,14 @@ export const useArkanoidGame = (
     
     // Check block collisions
     let hasCollision = false;
-    let allBlocksDestroyed = true;
+    let remainingBlocks = 0;
+    let lastRemainingBlock: Block | null = null;
     
     const updatedBlocks = blocks.map((block) => {
       if (block.destroyed) return block;
       
-      allBlocksDestroyed = false;
+      remainingBlocks++;
+      lastRemainingBlock = block;
       
       // Check for collision with this block
       if (
@@ -394,10 +389,40 @@ export const useArkanoidGame = (
     
     if (hasCollision) {
       setBlocks(updatedBlocks);
+      
+      // After this collision, check if there's only one block left
+      if (remainingBlocks === 2) {  // The block we just hit + the last one
+        // Find the last remaining block after the collision
+        const finalBlock = updatedBlocks.find(block => !block.destroyed);
+        
+        if (finalBlock && finalBlock.team) {
+          // End the game with the last block's team as "YOUR" team
+          setGameState(prev => ({
+            ...prev,
+            gameOver: true,
+            playing: false,
+            yourTeam: finalBlock.team
+          }));
+        }
+      }
+    } else if (remainingBlocks === 1 && lastRemainingBlock && lastRemainingBlock.team) {
+      // If we already have exactly one block left (but no collision this frame)
+      // This handles the case where we might have missed the transition to one block
+      setGameState(prev => {
+        if (!prev.gameOver) {
+          return {
+            ...prev,
+            gameOver: true,
+            playing: false,
+            yourTeam: lastRemainingBlock?.team || null
+          };
+        }
+        return prev;
+      });
     }
     
-    // Check if all blocks are destroyed to level up
-    if (allBlocksDestroyed && blocks.length > 0) {
+    // Check if all blocks are destroyed to level up (this shouldn't happen with our new logic)
+    if (remainingBlocks === 0 && !gameState.gameOver) {
       nextLevel();
       return;
     }
@@ -410,7 +435,7 @@ export const useArkanoidGame = (
       }));
     }
     
-  }, [ball, blocks, gameState.lives, gameState.playing, nextLevel, paddle]);
+  }, [ball, blocks, gameState.gameOver, gameState.playing, nextLevel]);
 
   // Game loop using requestAnimationFrame
   useEffect(() => {
