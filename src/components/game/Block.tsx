@@ -32,20 +32,25 @@ const Block: React.FC<BlockProps> = ({ block }) => {
     >
       {block.team && (
         <div className="w-full h-full flex items-center justify-center p-1 overflow-hidden">
-          <img 
-            src={block.team.logoUrl} 
-            alt={block.team.name}
-            className="max-w-full max-h-full object-contain"
-            loading="eager"
-            style={isChicagoBears ? { filter: 'brightness(0) invert(1)' } : {}}
-            onError={(e) => {
-              // Fallback if image fails to load
-              const target = e.target as HTMLImageElement;
-              target.onerror = null;
-              target.style.display = 'none';
-              target.parentElement!.innerHTML = block.team?.name.substring(0, 3) || '';
-            }}
-          />
+          {isChicagoBears ? (
+            <div className="w-full h-full flex items-center justify-center text-white font-bold text-sm">
+              CHI
+            </div>
+          ) : (
+            <img 
+              src={block.team.logoUrl} 
+              alt={block.team.name}
+              className="max-w-full max-h-full object-contain"
+              loading="eager"
+              onError={(e) => {
+                // Fallback if image fails to load
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                target.style.display = 'none';
+                target.parentElement!.innerHTML = block.team?.name.substring(0, 3) || '';
+              }}
+            />
+          )}
         </div>
       )}
     </div>
