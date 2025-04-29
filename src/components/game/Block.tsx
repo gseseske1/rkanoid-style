@@ -12,6 +12,9 @@ const Block: React.FC<BlockProps> = ({ block }) => {
     return null;
   }
 
+  // Special handling for Chicago Bears logo
+  const isChicagoBears = block.team?.id === "chi";
+
   return (
     <div
       className={cn(
@@ -34,6 +37,7 @@ const Block: React.FC<BlockProps> = ({ block }) => {
             alt={block.team.name}
             className="max-w-full max-h-full object-contain"
             loading="eager"
+            style={isChicagoBears ? { filter: 'brightness(0) invert(1)' } : {}}
             onError={(e) => {
               // Fallback if image fails to load
               const target = e.target as HTMLImageElement;
