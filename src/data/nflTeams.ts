@@ -53,7 +53,7 @@ export const NFL_TEAMS: NFLTeam[] = [
   {
     id: "dal",
     name: "Dallas Cowboys",
-    logoUrl: "https://static.www.nfl.com/image/private/f_auto/league/m8obleevs5l2v8lqkfvl",
+    logoUrl: "https://static.www.nfl.com/t_person_squared_mobile/f_auto/league/api/clubs/logos/DAL",
     color: "#003594",
   },
   {
